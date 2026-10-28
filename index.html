@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071a35">
+<title>Physician Wealth Insights</title>
+<style>
+  :root { --navy:#071a35; --blue:#0c3767; --mint:#12e09b; --cream:#f4f2e8; --muted:#aebdcb; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; min-height:100%; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  body { background:var(--navy); color:white; }
+  .topbar { height:78px; padding:0 5vw; display:flex; align-items:center; justify-content:space-between; background:var(--cream); color:#102846; }
+  .brand { display:flex; align-items:center; gap:12px; font-size:9px; line-height:1.45; letter-spacing:.16em; font-weight:800; text-transform:uppercase; }
+  .mark { width:19px; height:19px; border:2px solid var(--mint); border-radius:50%; position:relative; }
+  .mark:after { content:""; width:12px; height:12px; position:absolute; left:6px; top:5px; border:1px solid #b7ead7; border-radius:50%; }
+  .status { font-size:9px; letter-spacing:.18em; color:#6d7d8c; text-transform:uppercase; }
+  .status i { display:inline-block; width:7px; height:7px; margin-right:8px; border-radius:50%; background:var(--mint); box-shadow:0 0 12px #12e09b; }
+  .hero { min-height:calc(100vh - 78px); position:relative; overflow:hidden; display:flex; align-items:center; padding:70px 7vw 90px; background:
+    linear-gradient(90deg, rgba(4,18,39,.98) 0%, rgba(6,31,62,.94) 39%, rgba(8,48,88,.55) 65%, rgba(8,34,59,.22) 100%),
+    url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=2000&q=85') center right/cover no-repeat,
+    linear-gradient(125deg,#06152c,#124c82); }
+  .hero:before { content:""; position:absolute; inset:0; opacity:.22; background-image:linear-gradient(rgba(255,255,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.09) 1px,transparent 1px); background-size:84px 84px; pointer-events:none; }
+  .orb { position:absolute; right:4%; top:15%; width:43vw; height:48vw; max-height:560px; border:1px solid rgba(206,234,255,.28); border-radius:50%; transform:rotate(-22deg); pointer-events:none; }
+  .orb:after { content:""; position:absolute; inset:13% -5%; border:1px solid rgba(206,234,255,.2); border-radius:50%; transform:rotate(36deg); }
+  .content { position:relative; z-index:1; width:min(570px,100%); margin-left:18vw; }
+  .eyebrow { display:flex; align-items:center; gap:20px; color:#b3c3d2; font:700 10px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.08em; text-transform:uppercase; margin-bottom:55px; }
+  .line { width:43px; height:1px; background:var(--mint); }
+  .overline { color:var(--mint); font:700 9px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.15em; text-transform:uppercase; margin-bottom:16px; }
+  h1 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(52px,5.4vw,82px); font-weight:400; line-height:.88; letter-spacing:-.055em; margin:0 0 28px; }
+  h1 em { font-weight:400; }
+  .desc { max-width:440px; color:#d0d9e2; font-size:14px; line-height:1.85; margin:0 0 34px; }
+  .cta-row { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+  .cta { display:flex; align-items:center; gap:15px; min-width:230px; padding:15px 17px; color:#041d2b; background:var(--mint); text-decoration:none; transition:transform .2s ease, background .2s ease; }
+  .cta:hover { transform:translateY(-3px); background:#43f0b2; }
+  .bubble { display:grid; place-items:center; width:35px; height:35px; border:1px solid rgba(0,31,39,.25); flex:0 0 auto; }
+  .cta small { display:block; font:700 8px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.12em; margin-bottom:6px; }
+  .cta strong { display:block; font-size:13px; font-weight:700; line-height:1.35; }
+  .arrow { margin-left:auto; font-size:20px; }
+  .invite { color:#c0cbd6; font:600 9px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.02em; }
+  .footline { display:flex; align-items:center; gap:14px; margin-top:25px; color:#8599ac; font:700 9px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.12em; text-transform:uppercase; }
+  .footline .line { background:#8aa2b5; width:60px; }
+  .scroll { position:absolute; left:7vw; bottom:28px; color:#8fa1b2; font:700 9px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.1em; }
+  .scroll span { display:inline-block; width:58px; height:1px; background:#667f94; vertical-align:middle; margin:0 12px; position:relative; }
+  .scroll span:before { content:""; position:absolute; left:0; top:-1px; width:16px; height:3px; background:var(--mint); }
+  @media (max-width:800px) {
+    .topbar { height:65px; padding:0 22px; }
+    .status { font-size:8px; letter-spacing:.1em; }
+    .hero { min-height:calc(100vh - 65px); padding:60px 24px 85px; background-position:center,right center; }
+    .hero { background-image:linear-gradient(90deg,rgba(4,18,39,.97),rgba(6,31,62,.86)),url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=1200&q=80'); }
+    .content { margin-left:0; width:min(540px,100%); }
+    .eyebrow { gap:10px; font-size:8px; margin-bottom:45px; flex-wrap:wrap; }
+    h1 { font-size:clamp(53px,13vw,76px); }
+    .desc { font-size:13px; }
+    .orb { width:75vw; height:80vw; right:-25%; top:20%; }
+    .scroll { left:24px; }
+  }
+  @media (max-width:420px) { .status { max-width:130px; text-align:right; line-height:1.5; } .cta-row { align-items:flex-start; gap:12px; } .invite { padding-left:2px; } }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="mark"></span><span>Physician Wealth<br><span style="color:#18b986">Insights</span></span></div>
+    <div class="status"><i></i>Private Physician Community</div>
+  </header>
+  <main class="hero">
+    <div class="orb"></div>
+    <section class="content">
+      <div class="eyebrow"><span>01 / Community Invitation</span><span class="line"></span><span>For Physicians &amp; Healthcare Professionals</span></div>
+      <div class="overline">◌ WhatsApp Community / 02</div>
+      <h1>Physician<br>Wealth<br><em>Insights.</em></h1>
+      <p class="desc">A private learning community designed for physicians and healthcare professionals interested in global markets, investing education, and long-term wealth strategies.</p>
+      <div class="cta-row">
+        <a class="cta" href="https://chat.whatsapp.com/KbLWG3iPagtDEXIRkkC0BE" target="_blank" rel="noopener noreferrer" aria-label="Join the WhatsApp Community">
+          <span class="bubble" aria-hidden="true">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.4 8.4 0 0 1-12.7 7.2L3 20l1.3-4.8A8.4 8.4 0 1 1 21 11.5Z"/><path d="M8.8 8.6c.3-.6.6-.6.9-.6h.5c.2 0 .4.1.5.4l.7 1.7c.1.2 0 .4-.1.6l-.5.6c-.2.2-.2.4-.1.6.4.7 1 1.3 1.7 1.7.2.1.4.1.6-.1l.7-.8c.2-.2.4-.2.6-.1l1.6.8c.2.1.3.3.3.5 0 .6-.3 1.2-.7 1.5-.5.4-1.2.6-2 .4-1.1-.3-2.4-1-3.5-2.1s-1.8-2.4-2-3.4c-.2-.8 0-1.4.8-1.7Z"/></svg>
+          </span>
+          <span><small>PRIVATE INVITATION / 02</small><strong>Join WhatsApp<br>Community</strong></span>
+          <span class="arrow">↗</span>
+        </a>
+        <div class="invite">♙ &nbsp; Educational community<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; invitation only</div>
+      </div>
+      <div class="footline"><span>Private Signal / 02</span><span class="line"></span><span>Est. for the next chapter</span></div>
+    </section>
+    <div class="scroll">SCROLL TO EXPLORE <span></span> ↓</div>
+  </main>
+</body>
+</html>
