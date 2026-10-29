@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071a35">
+<title>Physician Wealth Insights</title>
+<style>
+  :root { --navy:#071a35; --blue:#0c3767; --mint:#12e09b; --cream:#f4f2e8; --muted:#aebdcb; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; min-height:100%; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }\n  html { scroll-behavior:smooth; }\n  body { overflow-x:hidden; overflow-y:auto; }
+  body { background:var(--navy); color:white; }
+  .topbar { height:78px; padding:0 5vw; display:flex; align-items:center; justify-content:space-between; background:var(--cream); color:#102846; }
+  .brand { display:flex; align-items:center; gap:12px; font-size:9px; line-height:1.45; letter-spacing:.16em; font-weight:800; text-transform:uppercase; }
+  .mark { width:19px; height:19px; border:2px solid var(--mint); border-radius:50%; position:relative; }
+  .mark:after { content:""; width:12px; height:12px; position:absolute; left:6px; top:5px; border:1px solid #b7ead7; border-radius:50%; }
+  .status { font-size:9px; letter-spacing:.18em; color:#6d7d8c; text-transform:uppercase; }
+  .status i { display:inline-block; width:7px; height:7px; margin-right:8px; border-radius:50%; background:var(--mint); box-shadow:0 0 12px #12e09b; }
+  .hero { min-height:calc(100vh - 78px); position:relative; overflow:hidden; display:flex; align-items:center; padding:70px 7vw 90px; background:
+    linear-gradient(90deg, rgba(4,18,39,.98) 0%, rgba(6,31,62,.94) 39%, rgba(8,48,88,.55) 65%, rgba(8,34,59,.22) 100%),
+    url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=2000&q=85') center right/cover no-repeat,
+    linear-gradient(125deg,#06152c,#124c82); }
+  .hero:before { content:""; position:absolute; inset:0; opacity:.22; background-image:linear-gradient(rgba(255,255,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.09) 1px,transparent 1px); background-size:84px 84px; pointer-events:none; }
+  .orb { position:absolute; right:4%; top:15%; width:43vw; height:48vw; max-height:560px; border:1px solid rgba(206,234,255,.28); border-radius:50%; transform:rotate(-22deg); pointer-events:none; }
+  .orb:after { content:""; position:absolute; inset:13% -5%; border:1px solid rgba(206,234,255,.2); border-radius:50%; transform:rotate(36deg); }
+  .content { position:relative; z-index:1; width:min(570px,100%); margin-left:18vw; }
+  .eyebrow { display:flex; align-items:center; gap:20px; color:#b3c3d2; font:700 10px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.08em; text-transform:uppercase; margin-bottom:55px; }
+  .line { width:43px; height:1px; background:var(--mint); }
+  .overline { color:var(--mint); font:700 9px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.15em; text-transform:uppercase; margin-bottom:16px; }
+  h1 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(52px,5.4vw,82px); font-weight:400; line-height:.88; letter-spacing:-.055em; margin:0 0 28px; }
+  h1 em { font-weight:400; }
+  .desc { max-width:440px; color:#d0d9e2; font-size:14px; line-height:1.85; margin:0 0 34px; }
+  .cta-row { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+  .cta { display:flex; align-items:center; gap:15px; min-width:230px; padding:15px 17px; color:#041d2b; background:var(--mint); text-decoration:none; transition:transform .2s ease, background .2s ease; }
+  .cta:hover { transform:translateY(-3px); background:#43f0b2; }
+  .bubble { display:grid; place-items:center; width:35px; height:35px; border:1px solid rgba(0,31,39,.25); flex:0 0 auto; }
+  .cta small { display:block; font:700 8px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.12em; margin-bottom:6px; }
+  .cta strong { display:block; font-size:13px; font-weight:700; line-height:1.35; }
+  .arrow { margin-left:auto; font-size:20px; }
+  .invite { color:#c0cbd6; font:600 9px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.02em; }
+  .footline { display:flex; align-items:center; gap:14px; margin-top:25px; color:#8599ac; font:700 9px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.12em; text-transform:uppercase; }
+  .footline .line { background:#8aa2b5; width:60px; }
+  .scroll { position:absolute; left:7vw; bottom:28px; color:#8fa1b2; font:700 9px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.1em; }
+  .scroll span { display:inline-block; width:58px; height:1px; background:#667f94; vertical-align:middle; margin:0 12px; position:relative; }
+  .scroll span:before { content:""; position:absolute; left:0; top:-1px; width:16px; height:3px; background:var(--mint); }
+  @media (max-width:800px) {
+    .topbar { height:65px; padding:0 22px; }
+    .status { font-size:8px; letter-spacing:.1em; }
+    .hero { min-height:calc(100vh - 65px); padding:60px 24px 85px; background-position:center,right center; }
+    .hero { background-image:linear-gradient(90deg,rgba(4,18,39,.97),rgba(6,31,62,.86)),url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=1200&q=80'); }
+    .content { margin-left:0; width:min(540px,100%); }
+    .eyebrow { gap:10px; font-size:8px; margin-bottom:45px; flex-wrap:wrap; }
+    h1 { font-size:clamp(53px,13vw,76px); }
+    .desc { font-size:13px; }
+    .orb { width:75vw; height:80vw; right:-25%; top:20%; }
+    .scroll { left:24px; }
+  }
+  @media (max-width:420px) { .status { max-width:130px; text-align:right; line-height:1.5; } .cta-row { align-items:flex-start; gap:12px; } .invite { padding-left:2px; } }
+
+  .why { background:var(--cream); color:#102846; padding:78px 8.7vw 80px; }
+  .section-label { display:flex; align-items:center; gap:18px; color:#6d7d8c; font:700 9px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.12em; text-transform:uppercase; margin-bottom:72px; }
+  .section-label .line { width:50px; }
+  .why-intro { display:grid; grid-template-columns:1fr 1fr; gap:8vw; align-items:center; margin-bottom:60px; }
+  .why .overline { color:#18b986; }
+  .why h2,.next h2 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(42px,5.2vw,72px); font-weight:400; line-height:.96; letter-spacing:-.05em; margin:0; }
+  .why h2 em,.next h2 em { font-weight:400; }
+  .statement { border-left:1px solid #c9d0d0; padding-left:24px; max-width:470px; }
+  .statement p { margin:0 0 14px; font:400 clamp(20px,2.3vw,30px)/1.18 Georgia,"Times New Roman",serif; }
+  .statement span { color:#71808e; font-size:11px; line-height:1.7; }
+  .feature-grid { display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid #d8d9d2; }
+  .feature { min-height:170px; padding:22px 24px 12px 0; }
+  .feature + .feature { border-left:1px solid #d8d9d2; padding-left:24px; }
+  .feature-num { display:flex; justify-content:space-between; color:#71808e; font:700 9px ui-monospace,SFMono-Regular,Menlo,monospace; }
+  .feature-num b { color:#18b986; font-size:15px; font-weight:400; }
+  .spark { display:block; color:#18b986; margin:18px 0 10px; }
+  .feature h3 { font:400 20px/1.2 Georgia,"Times New Roman",serif; margin:0 0 10px; }
+  .feature p { max-width:250px; color:#71808e; font-size:11px; line-height:1.65; margin:0; }
+  .next { background:radial-gradient(circle at 68% 0%,rgba(18,224,155,.12),transparent 25%),#071a35; color:var(--cream); padding:70px 8.7vw 78px; }
+  .next-label { color:var(--mint); font:700 9px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.14em; text-transform:uppercase; margin-bottom:20px; }
+  .next-content { display:grid; grid-template-columns:1.4fr .6fr; gap:8vw; align-items:center; }
+  .next h2 { font-size:clamp(42px,5.5vw,76px); }
+  .next-aside p { color:#b7c5d1; font-size:11px; line-height:1.7; margin:0 0 26px; }
+  .next-aside a { display:flex; justify-content:space-between; border-bottom:1px solid #506276; padding:0 0 12px; color:var(--mint); text-decoration:none; font:700 9px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.12em; }
+  .site-footer { min-height:54px; padding:16px 8.7vw; background:#041326; color:#8296a9; display:flex; align-items:center; justify-content:space-between; gap:20px; font:700 8px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.05em; }
+  .site-footer strong { color:var(--mint); font:700 18px Georgia,serif; }
+  .site-footer strong span { font-size:12px; }
+  @media (max-width:700px) {
+    .why { padding:58px 24px 60px; }
+    .section-label { margin-bottom:48px; flex-wrap:wrap; gap:10px; font-size:8px; }
+    .why-intro,.next-content { grid-template-columns:1fr; gap:34px; }
+    .statement { padding-left:18px; }
+    .feature-grid { grid-template-columns:1fr; }
+    .feature,.feature + .feature { border-left:0; border-bottom:1px solid #d8d9d2; padding:20px 0; min-height:auto; }
+    .feature:first-child { padding-top:20px; }
+    .next { padding:55px 24px 60px; }
+    .site-footer { padding:18px 24px; flex-wrap:wrap; }
+  }
+
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="mark"></span><span>Physician Wealth<br><span style="color:#18b986">Insights</span></span></div>
+    <div class="status"><i></i>Private Physician Community</div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="orb"></div>
+      <section class="content">
+        <div class="eyebrow"><span>01 / Community Invitation</span><span class="line"></span><span>For Physicians &amp; Healthcare Professionals</span></div>
+        <div class="overline">◌ WhatsApp Community / 02</div>
+        <h1>Physician<br>Wealth<br><em>Insights.</em></h1>
+        <p class="desc">A private learning community designed for physicians and healthcare professionals interested in global markets, investing education, and long-term wealth strategies.</p>
+        <div class="cta-row">
+          <a class="cta" href="https://chat.whatsapp.com/LyIHz1cYXqz3aPmmyGAvES" target="_blank" rel="noopener noreferrer" aria-label="Join the WhatsApp Community">
+            <span class="bubble" aria-hidden="true">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.4 8.4 0 0 1-12.7 7.2L3 20l1.3-4.8A8.4 8.4 0 1 1 21 11.5Z"/><path d="M8.8 8.6c.3-.6.6-.6.9-.6h.5c.2 0 .4.1.5.4l.7 1.7c.1.2 0 .4-.1.6l-.5.6c-.2.2-.2.4-.1.6.4.7 1 1.3 1.7 1.7.2.1.4.1.6-.1l.7-.8c.2-.2.4-.2.6-.1l1.6.8c.2.1.3.3.3.5 0 .6-.3 1.2-.7 1.5-.5.4-1.2.6-2 .4-1.1-.3-2.4-1-3.5-2.1s-1.8-2.4-2-3.4c-.2-.8 0-1.4.8-1.7Z"/></svg>
+            </span>
+            <span><small>PRIVATE INVITATION / 02</small><strong>Join WhatsApp<br>Community</strong></span>
+            <span class="arrow">↗</span>
+          </a>
+          <div class="invite">♙ &nbsp; Educational community<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; invitation only</div>
+        </div>
+        <div class="footline"><span>Private Signal / 01</span><span class="line"></span><span>Est. for the next chapter</span></div>
+      </section>
+      <div class="scroll">SCROLL TO EXPLORE <span></span> ↓</div>
+    </section>
+
+    <section class="why" id="community">
+      <div class="section-label"><span>02 / Why This Community</span><span class="line"></span><span>The Long View</span></div>
+      <div class="why-intro">
+        <div>
+          <div class="overline">Your Next Signal</div>
+          <h2>A sharper<br><em>point of view.</em></h2>
+        </div>
+        <div class="statement">
+          <p>Medicine teaches you to think in systems, probabilities, and outcomes. Your approach to wealth deserves the same precision.</p>
+          <span>No hype. No performance. Just a private room for better questions—and the people asking them.</span>
+        </div>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-num">01 <b>↗</b></span><span class="spark">✧</span><h3>Signals, not noise</h3><p>A considered feed of market ideas, research notes, and long-horizon thinking.</p></article>
+        <article class="feature"><span class="feature-num">02 <b>↗</b></span><span class="spark">✧</span><h3>Peers with perspective</h3><p>Connect with thoughtful physicians and healthcare leaders beyond the clinic.</p></article>
+        <article class="feature"><span class="feature-num">03 <b>↗</b></span><span class="spark">✧</span><h3>Progress with intent</h3><p>Build a more deliberate relationship with capital, career, and the future.</p></article>
+      </div>
+    </section>
+
+    <section class="next" id="invitation">
+      <div class="next-label">03 / Your Invitation</div>
+      <div class="next-content">
+        <h2>The next chapter<br><em>starts here.</em></h2>
+        <div class="next-aside">
+          <p>Built for the curious, the disciplined, and the quietly ambitious.</p>
+          <a href="https://chat.whatsapp.com/LyIHz1cYXqz3aPmmyGAvES" target="_blank" rel="noopener noreferrer">REQUEST ACCESS <span>↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <strong>PW<span>i</span></strong>
+    <span>Private educational community · For informational purposes only</span>
+    <span>♧ Invitation-only access</span>
+  </footer>
+</body>
+</html>
